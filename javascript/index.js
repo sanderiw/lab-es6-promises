@@ -39,6 +39,7 @@ getInstruction('mashedPotatoes', 0, (step) => {
         getInstruction('mashedPotatoes', 4, (step) => {
           document.querySelector("#mashedPotatoes").innerHTML += `<li>${step}</li>`
           document.querySelector("#mashedPotatoes").innerHTML += `<li>Mashed potatoes are ready!</li>`
+          document.getElementById("mashedPotatoesImg").removeAttribute('hidden')
         });
       });
     });
@@ -72,6 +73,7 @@ obtainInstruction('steak', 0)
                 .then( (step) => {
                   document.querySelector("#steak").innerHTML += `<li>${step}</li>`
                   document.querySelector("#steak").innerHTML += `<li>Steak is ready!</li>`
+                  document.getElementById("steakImg").removeAttribute('hidden')
                 })
               })
             })
@@ -83,27 +85,42 @@ obtainInstruction('steak', 0)
   
 
 // Iteration 3 using async/await
-// Brussel Sprouts
 async function makeBroccoli() {
   try {
     for (instructionIndex in broccoli) {
-      console.log(instructionIndex)
       await obtainInstruction('broccoli', instructionIndex)
       .then((step) => {
         document.querySelector("#broccoli").innerHTML += `<li>${step}</li>`
       })
     }
     document.querySelector("#broccoli").innerHTML += `<li>Broccoli is ready!</li>`
+    
 
   } catch(err) {
     console.log(err)
   }
 
 }
-makeBroccoli();
 
-
+//Getting the broccoli img after makeBroccoli is done
+makeBroccoli().then(() => document.getElementById("broccoliImg").removeAttribute('hidden'));
 
 
 // Bonus 2 - Promise all
-// ...
+async function makeBrusselsSprouts() {
+  try {
+    const promisesArr = [];
+    for (instructionIndex in brusselsSprouts) {
+      promisesArr.push(await obtainInstruction('brusselsSprouts', instructionIndex))
+    }
+    promisesArr.push('Brussels Sprouts are ready!')
+    Promise.all(promisesArr).then((promises) => promises.map((instruction) => document.querySelector("#brusselsSprouts").innerHTML += `<li>${instruction}</li>`))
+    
+    document.getElementById("brusselsSproutsImg").removeAttribute('hidden');
+
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+makeBrusselsSprouts()
